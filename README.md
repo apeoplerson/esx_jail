@@ -19,7 +19,7 @@ Let cops jail people!
 5. (Optional) See below on how to jail via `esx_policejob`
 
 # Dependencies
-oxmysql (I removed async since it was crap)
+oxmysql (I removed async since it was crap) - [oxmysql](https://github.com/overextended/oxmysql)
 
 # How to jail
 
@@ -36,6 +36,7 @@ oxmysql (I removed async since it was crap)
 # Based off
 - [Original script](https://forum.fivem.net/t/release-fx-jailer-1-1-0-0/41963)
 - [dbjailer](https://github.com/SSPU1W/dbjailer)
+- [oxmysql](https://github.com/overextended/oxmysql)
 
 # Add to menu
 

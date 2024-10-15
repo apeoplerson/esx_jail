@@ -1,13 +1,11 @@
 local isInJail, unjail = false, false
 local jailTime, fastTimer = 0, 0
-ESX = nil
 
-Citizen.CreateThread(function()
 	while ESX == nil do
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 		Citizen.Wait(0)
 	end
-end)
+--end)
 
 RegisterNetEvent('esx_jail:jailPlayer')
 AddEventHandler('esx_jail:jailPlayer', function(_jailTime)

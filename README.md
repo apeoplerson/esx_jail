@@ -18,6 +18,9 @@ Let cops jail people!
 4. Select language in `config.lua`
 5. (Optional) See below on how to jail via `esx_policejob`
 
+# Dependencies
+oxmysql (I removed async since it was crap)
+
 # How to jail
 
 - Use the `esx_jail:sendToJail(source, jailTime)` server side trigger

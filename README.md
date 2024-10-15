@@ -43,12 +43,16 @@ oxmysql (I removed async since it was crap) - [oxmysql](https://github.com/overe
 Example in `esx_policejob: client/main.lua`:
 
 ```lua
-		{label = _U('fine'),			value = 'fine'},
-		{label = _U('jail'),			value = 'jail'}
+				{icon = "fas fa-idkyet", title = TranslateCap('fine'), value = 'fine'},
+				{icon = "fas fa-idkyet", title = TranslateCap('jail'), value = 'jail'},
+				{icon = "fas fa-idkyet", title = TranslateCap('unpaid_bills'), value = 'unpaid_bills'}
 		
 		
-		if data2.current.value == 'jail' then
-			JailPlayer(GetPlayerServerId(closestPlayer))
+					elseif action == 'license' then
+						ShowPlayerLicense(closestPlayer)
+					elseif action == 'jail' then
+						JailPlayer(GetPlayerServerId(closestPlayer))
+					elseif action == 'unpaid_bills' then
 		end
 
 ---

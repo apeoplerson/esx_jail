@@ -43,9 +43,9 @@ oxmysql (I removed async since it was crap) - [oxmysql](https://github.com/overe
 Example in `esx_policejob: client/main.lua`:
 
 ```lua
-				{icon = "fas fa-idkyet", title = TranslateCap('fine'), value = 'fine'},
-				{icon = "fas fa-idkyet", title = TranslateCap('jail'), value = 'jail'},
-				{icon = "fas fa-idkyet", title = TranslateCap('unpaid_bills'), value = 'unpaid_bills'}
+		{icon = "fas fa-idkyet", title = TranslateCap('fine'), value = 'fine'},
+		{icon = "fas fa-idkyet", title = TranslateCap('jail'), value = 'jail'},
+		{icon = "fas fa-idkyet", title = TranslateCap('unpaid_bills'), value = 'unpaid_bills'}
 		
 		
 					elseif action == 'license' then

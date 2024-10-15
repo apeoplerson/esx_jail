@@ -68,3 +68,9 @@ function JailPlayer(player)
 	end)
 end
 ```
+
+This is for English local only for esx_policejob. Add this line below to (esx_policejob/locales/en.lua) this is needed so that it says in the interact menu (Jail). This is the same concept for all other locales BUT make sure you edit the line ({label = _U('blah blah'),			value = 'blah blah'}) so that it matches your lang. So whatever word you put in Jail you need to match this in locales (['blah blah'] = 'blah blah',)
+```
+['jail'] = 'jail',
+```
+

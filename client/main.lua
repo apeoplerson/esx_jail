@@ -1,18 +1,17 @@
 local isInJail, unjail = false, false
 local jailTime, fastTimer = 0, 0
 
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-	end
---end)
+-- Initialize ESX
+ESX = exports["es_extended"]:getSharedObject()
 
 RegisterNetEvent('esx_jail:jailPlayer')
 AddEventHandler('esx_jail:jailPlayer', function(_jailTime)
 	jailTime = _jailTime
+	fastTimer = jailTime
 
 	local playerPed = PlayerPedId()
 
+	-- Apply prison uniform
 	TriggerEvent('skinchanger:getSkin', function(skin)
 		if skin.sex == 0 then
 			TriggerEvent('skinchanger:loadClothes', skin, Config.Uniforms.prison_wear.male)
@@ -25,6 +24,7 @@ AddEventHandler('esx_jail:jailPlayer', function(_jailTime)
 	ESX.Game.Teleport(playerPed, Config.JailLocation)
 	isInJail, unjail = true, false
 
+	-- Main jail loop
 	while not unjail do
 		playerPed = PlayerPedId()
 
@@ -33,36 +33,40 @@ AddEventHandler('esx_jail:jailPlayer', function(_jailTime)
 			ClearPedTasksImmediately(playerPed)
 		end
 
-		Citizen.Wait(20000)
+		Citizen.Wait(20000) -- Wait 20 seconds before checking escape attempt
 
 		-- Is the player trying to escape?
-		if #(GetEntityCoords(playerPed) - Config.JailLocation) > 10 then
+		local distance = #(GetEntityCoords(playerPed) - vector3(Config.JailLocation.x, Config.JailLocation.y, Config.JailLocation.z))
+		if distance > 10.0 then
 			ESX.Game.Teleport(playerPed, Config.JailLocation)
 			TriggerEvent('chat:addMessage', {args = {_U('judge'), _U('escape_attempt')}, color = {147, 196, 109}})
 		end
 	end
 
+	-- Release player from jail
 	ESX.Game.Teleport(playerPed, Config.JailBlip)
 	isInJail = false
 
+	-- Restore player skin
 	ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
 		TriggerEvent('skinchanger:loadSkin', skin)
 	end)
 end)
 
+-- Jail timer thread
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
-
 		if jailTime > 0 and isInJail then
-			if fastTimer < 0 then
-				fastTimer = jailTime
-			end
+			Citizen.Wait(1000) -- Update every second
 
-			draw2dText(_U('remaining_msg', ESX.Math.Round(fastTimer)), 0.175, 0.955)
-			fastTimer = fastTimer - 0.01
+			fastTimer = fastTimer - 1
+			draw2dText(_U('remaining_msg', fastTimer), 0.175, 0.955)
+
+			if fastTimer <= 0 then
+				TriggerEvent('esx_jail:unjailPlayer')
+			end
 		else
-			Citizen.Wait(500)
+			Citizen.Wait(5000) -- No need to run the loop frequently if not in jail
 		end
 	end
 end)
@@ -78,11 +82,12 @@ AddEventHandler('playerSpawned', function(spawn)
 	end
 end)
 
+-- Create jail blip on the map
 Citizen.CreateThread(function()
 	local blip = AddBlipForCoord(Config.JailBlip)
 
 	SetBlipSprite(blip, 188)
-	SetBlipScale (blip, 1.9)
+	SetBlipScale(blip, 1.9)
 	SetBlipColour(blip, 6)
 	SetBlipAsShortRange(blip, true)
 
@@ -91,6 +96,7 @@ Citizen.CreateThread(function()
 	EndTextCommandSetBlipName(blip)
 end)
 
+-- Function to draw 2D text on screen
 function draw2dText(text, x, y)
 	SetTextFont(4)
 	SetTextScale(0.45, 0.45)
